@@ -3,15 +3,28 @@ package cyFlag
 import (
 	"cyDS"
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
 )
 
+type cyflag struct {
+	Name  string
+	Type  interface{}
+	Usage string
+}
+
 var (
-	trie cyDS.Trie
-	Args []string
+	trie  cyDS.Trie
+	Args  []string
+	flags []cyflag
 )
+
+func initData() {
+	Args = make([]string, 0)
+	flags = make([]cyflag, 0)
+}
 
 func BoolVar(v *bool, name string, defaultValue bool, usage string) {
 	*v = defaultValue
@@ -29,7 +42,7 @@ func StringVar(v *string, name string, defaultValue string, usage string) {
 }
 
 func Parse() error {
-	Args = make([]string, 1)
+	initData()
 	args := os.Args[1:]
 
 	for i := 0; i < len(args); i++ {
@@ -38,6 +51,7 @@ func Parse() error {
 			switch node.Value.(type) {
 			case *bool:
 				*(node.Value.(*bool)) = true
+
 			case *string:
 				if i+1 >= len(args) {
 					return errors.New("no string value")
@@ -45,9 +59,10 @@ func Parse() error {
 
 				*(node.Value.(*string)) = args[i+1]
 				i++
+
 			case *int:
 				if i+1 >= len(args) {
-					return errors.New("no string value")
+					return errors.New("no int value")
 				}
 
 				var err error
@@ -56,10 +71,10 @@ func Parse() error {
 					return err
 				}
 				i++
-			default:
-				Args = append(Args, s)
 			}
 
+		} else {
+			Args = append(Args, s)
 		}
 	}
 
@@ -67,7 +82,7 @@ func Parse() error {
 }
 
 func ParseString(str string) error {
-	Args = make([]string, 1)
+	initData()
 	args := strings.Split(str, " ")
 
 	for i := 0; i < len(args); i++ {
@@ -76,6 +91,7 @@ func ParseString(str string) error {
 			switch node.Value.(type) {
 			case *bool:
 				*(node.Value.(*bool)) = true
+
 			case *string:
 				if i+1 >= len(args) {
 					return errors.New("no string value")
@@ -83,9 +99,10 @@ func ParseString(str string) error {
 
 				*(node.Value.(*string)) = args[i+1]
 				i++
+
 			case *int:
 				if i+1 >= len(args) {
-					return errors.New("no string value")
+					return errors.New("no int value")
 				}
 
 				var err error
@@ -94,12 +111,18 @@ func ParseString(str string) error {
 					return err
 				}
 				i++
-			default:
-				Args = append(Args, s)
 			}
 
+		} else {
+			Args = append(Args, s)
 		}
 	}
 
 	return nil
+}
+
+func Usage() {
+	for _, f := range flags {
+		fmt.Print(f.Name, f.Type, "("+f.Usage+") ")
+	}
 }

@@ -27,7 +27,7 @@ func TestFlag(t *testing.T) {
 	IntVar(&i, "-int", 57, "test int")
 	StringVar(&s, "-str", "default", "test string")
 
-	testCase("-bool -int 10 -str hello")
+	testCase("args[1] args[2] -bool -int 10 -str hello")
 	testCase("-bool -int")
 	testCase("-int 123a -str 231")
 	testCase("-int 235 -str zxc -bool")
