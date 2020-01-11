@@ -21,7 +21,9 @@
 - string
 
 They are all similar, for example:
-> cyFlag.BoolVar(&variable,"-boolflag",false,"it's a bool flag")
+```go
+cyFlag.BoolVar(&variable,"-boolflag",false,"it's a bool flag")
+```
 
 The arguments of the function above are:
 1. the address of the variable
@@ -33,7 +35,9 @@ The arguments of the function above are:
 
 ### Parse
 **after all bindings having finished**, just call
-> cyFlag.Parse()
+```go
+cyFlag.Parse()
+```
 
 *cyFlag* will parse the CLI arguments and store the value into the binding variables.
 
