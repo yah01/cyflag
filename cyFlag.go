@@ -47,30 +47,33 @@ func Parse() error {
 
 	for i := 0; i < len(args); i++ {
 		s := args[i]
+
 		if node, ok := trie.Match(s); ok {
-			switch node.Value.(type) {
-			case *bool:
-				*(node.Value.(*bool)) = true
+			for i, value := range node.Values {
+				switch value.(type) {
+				case *bool:
+					*(node.Values[i].(*bool)) = true
 
-			case *string:
-				if i+1 >= len(args) {
-					return errors.New("no string value")
+				case *string:
+					if i+1 >= len(args) {
+						return errors.New("no string value")
+					}
+
+					*(node.Values[i].(*string)) = args[i+1]
+					i++
+
+				case *int:
+					if i+1 >= len(args) {
+						return errors.New("no int value")
+					}
+
+					var err error
+					*(node.Values[i].(*int)), err = strconv.Atoi(args[i+1])
+					if err != nil {
+						return err
+					}
+					i++
 				}
-
-				*(node.Value.(*string)) = args[i+1]
-				i++
-
-			case *int:
-				if i+1 >= len(args) {
-					return errors.New("no int value")
-				}
-
-				var err error
-				*(node.Value.(*int)), err = strconv.Atoi(args[i+1])
-				if err != nil {
-					return err
-				}
-				i++
 			}
 
 		} else {
@@ -87,30 +90,33 @@ func ParseString(str string) error {
 
 	for i := 0; i < len(args); i++ {
 		s := args[i]
+
 		if node, ok := trie.Match(s); ok {
-			switch node.Value.(type) {
-			case *bool:
-				*(node.Value.(*bool)) = true
+			for i, value := range node.Values {
+				switch value.(type) {
+				case *bool:
+					*(node.Values[i].(*bool)) = true
 
-			case *string:
-				if i+1 >= len(args) {
-					return errors.New("no string value")
+				case *string:
+					if i+1 >= len(args) {
+						return errors.New("no string value")
+					}
+
+					*(node.Values[i].(*string)) = args[i+1]
+					i++
+
+				case *int:
+					if i+1 >= len(args) {
+						return errors.New("no int value")
+					}
+
+					var err error
+					*(node.Values[i].(*int)), err = strconv.Atoi(args[i+1])
+					if err != nil {
+						return err
+					}
+					i++
 				}
-
-				*(node.Value.(*string)) = args[i+1]
-				i++
-
-			case *int:
-				if i+1 >= len(args) {
-					return errors.New("no int value")
-				}
-
-				var err error
-				*(node.Value.(*int)), err = strconv.Atoi(args[i+1])
-				if err != nil {
-					return err
-				}
-				i++
 			}
 
 		} else {
