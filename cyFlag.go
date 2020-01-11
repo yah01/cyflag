@@ -1,12 +1,13 @@
 package cyFlag
 
 import (
-	"cyDS"
 	"errors"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/yah01/cyDS"
 )
 
 type cyflag struct {
