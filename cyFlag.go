@@ -1,4 +1,4 @@
-package cyFlag
+package cyflag
 
 import (
 	"errors"
