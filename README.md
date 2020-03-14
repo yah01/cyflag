@@ -1,4 +1,4 @@
-# cyFlag
+# cyflag
 
 ## README.md
 - [English](README.md)
