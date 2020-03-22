@@ -1,135 +1,37 @@
 package cyflag
 
 import (
-	"errors"
-	"fmt"
 	"os"
-	"strconv"
-	"strings"
-
-	"github.com/yah01/cyDS"
 )
 
 type cyflag struct {
+	variable     interface{}
+	defaultValue interface{}
+
 	Name  string
-	Type  interface{}
 	Usage string
 }
 
 var (
-	trie  cyDS.Trie
-	Args  []string
-	flags []cyflag
+	osParser Parser
 )
 
-func initData() {
-	Args = make([]string, 0)
-	flags = make([]cyflag, 0)
-}
-
 func BoolVar(v *bool, name string, defaultValue bool, usage string) {
-	*v = defaultValue
-	trie.Insert(name, v)
+	osParser.BoolVar(v, name, defaultValue, usage)
 }
 
 func IntVar(v *int, name string, defaultValue int, usage string) {
-	*v = defaultValue
-	trie.Insert(name, v)
+	osParser.IntVar(v, name, defaultValue, usage)
 }
 
 func StringVar(v *string, name string, defaultValue string, usage string) {
-	*v = defaultValue
-	trie.Insert(name, v)
+	osParser.StringVar(v, name, defaultValue, usage)
 }
 
 func Parse() error {
-	initData()
-	args := os.Args[1:]
-
-	for i := 0; i < len(args); i++ {
-		s := args[i]
-
-		if node, ok := trie.Match(s); ok {
-			for i, value := range node.Values {
-				switch value.(type) {
-				case *bool:
-					*(node.Values[i].(*bool)) = true
-
-				case *string:
-					if i+1 >= len(args) {
-						return errors.New("no string value")
-					}
-
-					*(node.Values[i].(*string)) = args[i+1]
-					i++
-
-				case *int:
-					if i+1 >= len(args) {
-						return errors.New("no int value")
-					}
-
-					var err error
-					*(node.Values[i].(*int)), err = strconv.Atoi(args[i+1])
-					if err != nil {
-						return err
-					}
-					i++
-				}
-			}
-
-		} else {
-			Args = append(Args, s)
-		}
-	}
-
-	return nil
-}
-
-func ParseString(str string) error {
-	initData()
-	args := strings.Split(str, " ")
-
-	for i := 0; i < len(args); i++ {
-		s := args[i]
-
-		if node, ok := trie.Match(s); ok {
-			for i, value := range node.Values {
-				switch value.(type) {
-				case *bool:
-					*(node.Values[i].(*bool)) = true
-
-				case *string:
-					if i+1 >= len(args) {
-						return errors.New("no string value")
-					}
-
-					*(node.Values[i].(*string)) = args[i+1]
-					i++
-
-				case *int:
-					if i+1 >= len(args) {
-						return errors.New("no int value")
-					}
-
-					var err error
-					*(node.Values[i].(*int)), err = strconv.Atoi(args[i+1])
-					if err != nil {
-						return err
-					}
-					i++
-				}
-			}
-
-		} else {
-			Args = append(Args, s)
-		}
-	}
-
-	return nil
+	return osParser.Parse(os.Args[1:])
 }
 
 func Usage() {
-	for _, f := range flags {
-		fmt.Print(f.Name, f.Type, "("+f.Usage+") ")
-	}
+
 }
