@@ -12,8 +12,30 @@
 
 ### Sample
 ```go
+package main
 
+import (
+	"fmt"
+	"github.com/yah01/cyflag"
+)
+
+func main() {
+	var (
+		parser cyflag.Parser
+		str    = "i love cyflag -best"
+
+		best          bool
+		loveSomething string
+	)
+	parser.BoolVar(&best, "-best", false, "-best")
+	parser.StringVar(&loveSomething, "love", "something", "love [string]")
+
+	parser.ParseString(str)
+
+	fmt.Println(best,loveSomething)
+}
 ```
+Sample above will output "true love".
 
 ### Bind variable with flag
 *cyflag* could bind 3 kinds of variable:
@@ -23,7 +45,7 @@
 
 They are all similar, for example:
 ```go
-cyflag.BoolVar(&variable,"-boolflag",false,"it's a bool flag")
+parser.BoolVar(&variable,"-boolflag",false,"it's a bool flag")
 ```
 
 The arguments of the function above are:
@@ -34,12 +56,10 @@ The arguments of the function above are:
 
 **The flag does not have to start with character '-'**, different with go standard lib *flag* that adding '-' automatically.
 
-### Parser Type
-
 ### Parse
 **after all bindings having finished**, just call
 ```go
-cyflag.Parse()
+parser.Parse()
 ```
 
 *cyflag* will parse the CLI arguments and store the value into the binding variables.
@@ -51,3 +71,5 @@ cyflag.Parse()
 the *non-flag* arguments will store in *cyflag.Args*
 
 **There are no limitation in the order of arguments and flags**, which is totally different with go standard lib *flag*, the latter parses until meet first non-flag arguments.
+
+For parsing `os.Args[1:]`, just call cyflag.BoolVar(...) (or any other binding function), and then call cyflag.Parse().
