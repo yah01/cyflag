@@ -6,13 +6,14 @@
 
 *cyflag* is a lib for parsing flag, which being used frequently in CLI(Command-Line Interface). it's easier to use and has less limitation than the go standard lib *flag*.
 
-## Dependences
-
-- [cyDS](https://github.com/yah01/cyDS-GO): some data structures implements, *cyflag* uses trie to match the flag fast.
-
 ## Usage
 
 *cyflag* looks like go standard package [flag](https://golang.org/pkg/flag/), as well the usage.
+
+### Sample
+```go
+
+```
 
 ### Bind variable with flag
 *cyflag* could bind 3 kinds of variable:
@@ -32,6 +33,8 @@ The arguments of the function above are:
 4. usage information
 
 **The flag does not have to start with character '-'**, different with go standard lib *flag* that adding '-' automatically.
+
+### Parser Type
 
 ### Parse
 **after all bindings having finished**, just call
