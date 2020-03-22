@@ -1,11 +1,11 @@
-package examples
+package stringutil_test
 
 import (
 	"fmt"
 	"github.com/yah01/cyflag"
 )
 
-func ParseString() {
+func ExampleParseString() {
 	var (
 		parser cyflag.Parser
 		str    = "i love cyflag -best"
@@ -18,5 +18,5 @@ func ParseString() {
 
 	parser.ParseString(str)
 
-	fmt.Println(best,loveSomething)
+	fmt.Println(best, loveSomething)
 }
