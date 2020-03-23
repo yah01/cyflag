@@ -40,6 +40,10 @@ func (parser *Parser) IntVar(v *int, name string, defaultValue int, usage string
 	parser.bind(v, name, defaultValue, usage)
 }
 
+func (parser *Parser) FloatVar(v *float64, name string, defaultValue float64, usage string) {
+	parser.bind(v, name, defaultValue, usage)
+}
+
 func (parser *Parser) StringVar(v *string, name string, defaultValue string, usage string) {
 	parser.bind(v, name, defaultValue, usage)
 }
@@ -52,6 +56,8 @@ func (parser *Parser) Parse(args []string) error {
 			*(flag.variable.(*bool)) = flag.defaultValue.(bool)
 		case *int:
 			*(flag.variable.(*int)) = flag.defaultValue.(int)
+		case *float64:
+			*(flag.variable.(*float64)) = flag.defaultValue.(float64)
 		case *string:
 			*(flag.variable.(*string)) = flag.defaultValue.(string)
 		}
@@ -73,6 +79,17 @@ func (parser *Parser) Parse(args []string) error {
 					}
 					var err error
 					*(flag.variable.(*int)), err = strconv.Atoi(args[i+1])
+					if err != nil {
+						return err
+					}
+					i++
+
+				case *float64:
+					if i+1 >= len(args) {
+						return fmt.Errorf("Miss decimal, usage: %v", flag.Usage)
+					}
+					var err error
+					*(flag.variable.(*float64)), err = strconv.ParseFloat(args[i+1], 64)
 					if err != nil {
 						return err
 					}
