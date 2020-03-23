@@ -25,6 +25,13 @@ func (parser *Parser) bind(v interface{}, name string, defaultValue interface{},
 	parser.flags = append(parser.flags, *flag)
 }
 
+//func (parser *Parser) Bind(v interface{}, name string, defaultValue interface{}, usage string) {
+//	switch v.(type) {
+//	case *bool, *int, *string:
+//		parser.bind(v, name, defaultValue, usage)
+//	}
+//}
+
 func (parser *Parser) BoolVar(v *bool, name string, defaultValue bool, usage string) {
 	parser.bind(v, name, defaultValue, usage)
 }
@@ -89,4 +96,8 @@ func (parser *Parser) Parse(args []string) error {
 
 func (parser *Parser) ParseString(str string) error {
 	return parser.Parse(strings.Fields(str))
+}
+
+func (parser *Parser) Clear() {
+	*parser = Parser{}
 }

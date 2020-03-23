@@ -32,6 +32,10 @@ func Parse() error {
 	return osParser.Parse(os.Args[1:])
 }
 
+func Clear() {
+	osParser.Clear()
+}
+
 func Usage() {
 
 }
