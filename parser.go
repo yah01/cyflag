@@ -26,12 +26,12 @@ func (parser *Parser) bind(v interface{}, name string, defaultValue interface{},
 	parser.flags = append(parser.flags, *flag)
 }
 
-//func (parser *Parser) Bind(v interface{}, name string, defaultValue interface{}, usage string) {
-//	switch v.(type) {
-//	case *bool, *int, *string:
-//		parser.bind(v, name, defaultValue, usage)
-//	}
-//}
+func (parser *Parser) Bind(v interface{}, name string, defaultValue interface{}, usage string) {
+	switch v.(type) {
+	case *bool, *int, *int32, *int64, *float32, *float64, *string, *[]byte:
+		parser.bind(v, name, defaultValue, usage)
+	}
+}
 
 func (parser *Parser) BoolVar(v *bool, name string, defaultValue bool, usage string) {
 	parser.bind(v, name, defaultValue, usage)
@@ -62,11 +62,11 @@ func (parser *Parser) Parse(args []string) error {
 		switch flag.variable.(type) {
 		case *bool:
 			*(flag.variable.(*bool)) = flag.defaultValue.(bool)
-		case *int:
+		case *int, *int32, *int64:
 			*(flag.variable.(*int)) = flag.defaultValue.(int)
-		case *float64:
+		case *float32, *float64:
 			*(flag.variable.(*float64)) = flag.defaultValue.(float64)
-		case *string:
+		case *string, *[]byte:
 			*(flag.variable.(*string)) = flag.defaultValue.(string)
 		}
 	}
