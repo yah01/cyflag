@@ -49,6 +49,11 @@ func (parser *Parser) StringVar(v *string, name string, defaultValue string, usa
 }
 
 func (parser *Parser) Parse(args []string) error {
+	if args == nil {
+		args = parser.LeftArgs
+	} else {
+		parser.LeftArgs = nil
+	}
 	for i, _ := range parser.flags {
 		flag := &parser.flags[i]
 		switch flag.variable.(type) {
