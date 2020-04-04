@@ -36,6 +36,10 @@ func Parse() error {
 	return osParser.Parse(os.Args[1:])
 }
 
+func GetLeftArgs() []string {
+	return osParser.LeftArgs
+}
+
 func Clear() {
 	osParser.Clear()
 }
