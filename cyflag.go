@@ -43,10 +43,10 @@ func Parse() error {
 	return err
 }
 
-func Clear() {
-	osParser.Clear()
+func PrintUsage() {
+	osParser.PrintUsage()
 }
 
-func Usage() {
-
+func Clear() {
+	osParser.Clear()
 }

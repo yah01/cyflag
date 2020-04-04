@@ -115,6 +115,12 @@ func (parser *Parser) ParseString(str string) error {
 	return parser.Parse(strings.Fields(str))
 }
 
+func (parser *Parser) PrintUsage() {
+	for _, flag := range parser.flags {
+		fmt.Printf("%s: %s\n", flag.Name, flag.Usage)
+	}
+}
+
 func (parser *Parser) Clear() {
 	*parser = Parser{}
 }
