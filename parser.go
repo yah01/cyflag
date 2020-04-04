@@ -3,6 +3,7 @@ package cyflag
 import (
 	"fmt"
 	"github.com/yah01/cyds"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -49,6 +50,8 @@ func (parser *Parser) StringVar(v *string, name string, defaultValue string, usa
 }
 
 func (parser *Parser) Parse(args []string) error {
+	log.Println(args)
+
 	if args == nil {
 		args = parser.LeftArgs
 	} else {
@@ -70,9 +73,10 @@ func (parser *Parser) Parse(args []string) error {
 
 	for i := 0; i < len(args); i++ {
 		s := args[i]
+		log.Println(s)
 		if node, ok := parser.trie.Match(s); ok {
-			for i := 0; i < len(node.Values); i++ {
-				flag := node.Values[i].(*cyflag)
+			for j := 0; j < len(node.Values); j++ {
+				flag := node.Values[j].(*cyflag)
 
 				switch flag.variable.(type) {
 				case *bool:
