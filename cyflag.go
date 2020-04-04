@@ -14,7 +14,12 @@ type cyflag struct {
 
 var (
 	osParser Parser
+	Args     []string
 )
+
+func init() {
+	copy(Args,os.Args)
+}
 
 func BoolVar(v *bool, name string, defaultValue bool, usage string) {
 	osParser.BoolVar(v, name, defaultValue, usage)
@@ -33,11 +38,9 @@ func StringVar(v *string, name string, defaultValue string, usage string) {
 }
 
 func Parse() error {
-	return osParser.Parse(os.Args[1:])
-}
-
-func GetLeftArgs() []string {
-	return osParser.LeftArgs
+	err := osParser.Parse(os.Args[1:])
+	Args = osParser.LeftArgs
+	return err
 }
 
 func Clear() {
