@@ -3,6 +3,7 @@ package cyflag
 import (
 	"fmt"
 	"github.com/yah01/cyds"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -26,9 +27,25 @@ func (parser *Parser) bind(v interface{}, name string, defaultValue interface{},
 }
 
 func (parser *Parser) Bind(v interface{}, name string, defaultValue interface{}, usage string) {
+
 	switch v.(type) {
-	case *bool, *int, *int32, *int64, *float32, *float64, *string, *[]byte:
-		parser.bind(v, name, defaultValue, usage)
+	case *bool:
+		parser.bind(v, name, reflect.ValueOf(defaultValue).Bool(), usage)
+	case *int, *int8, *int16, *int32, *int64:
+		parser.bind(v, name, reflect.ValueOf(defaultValue).Int(), usage)
+	case *uint, *uint8, *uint16, *uint32, *uint64:
+		parser.bind(v, name, reflect.ValueOf(defaultValue).Uint(), usage)
+	case *float32, *float64:
+		parser.bind(v, name, reflect.ValueOf(defaultValue).Float(), usage)
+	case *string:
+		if kind := reflect.TypeOf(defaultValue).Kind(); kind == reflect.String {
+			parser.bind(v, name, defaultValue, usage)
+		} else {
+			panic(reflect.ValueError{
+				Method: "reflect.Value.String",
+				Kind:   kind,
+			})
+		}
 	}
 }
 
@@ -37,6 +54,10 @@ func (parser *Parser) BoolVar(v *bool, name string, defaultValue bool, usage str
 }
 
 func (parser *Parser) IntVar(v *int, name string, defaultValue int, usage string) {
+	parser.bind(v, name, defaultValue, usage)
+}
+
+func (parser *Parser) UintVar(v *uint, name string, defaultValue uint, usage string) {
 	parser.bind(v, name, defaultValue, usage)
 }
 

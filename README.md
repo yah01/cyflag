@@ -42,21 +42,23 @@ love: cyflag
 *cyflag* looks like go standard package [flag](https://golang.org/pkg/flag/), as well the usage.
 
 ### Bind variable with flag
-*cyflag* could bind 4 kinds of variable:
+*cyflag* could bind 5 kinds of variable:
 - bool
-- int (and int32, int64)
+- int (and int8, int16, ...)
+- uint (and uint8,uint16, ...)
 - float64 (and float32)
-- string (and []byte)
+- string
 
-They are all similar, and there are four methods for binding:
+They are all similar, and there are 5 methods for binding:
 ```go
 parser.BoolVar(&boolVariable,"-bool",false,"it's a bool flag")
 parser.IntVar(&intVariable,"-int",0,"it's a int flag")
+parser.UintVar(&uintVariable,"-uint",0,"it's a uint flag")
 parser.FloatVar(&float64Variable,"-float64",0.0,"it's a float64 flag")
 parser.StringVar(&stringVariable,"-string","empty","it's a string flag")
 ```
 
-For convenience, cyflag provides a method for binding variable of every type, and it's the only way to bind the variable of type which is not default type of cyflog(int32, int64, float32, []byte).
+For convenience, cyflag provides a method for binding variable of every type, and it's the only way to bind the variable of type which is not default type of cyflog(int32, int64, float32).
 ```go
 parser.Bind(&variable,"-anytype","value with same type with variable","the usage")
 ```
