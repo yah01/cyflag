@@ -18,7 +18,7 @@ var (
 )
 
 func init() {
-	copy(Args,os.Args)
+	copy(Args, os.Args)
 }
 
 func BoolVar(v *bool, name string, defaultValue bool, usage string) {
@@ -27,6 +27,10 @@ func BoolVar(v *bool, name string, defaultValue bool, usage string) {
 
 func IntVar(v *int, name string, defaultValue int, usage string) {
 	osParser.IntVar(v, name, defaultValue, usage)
+}
+
+func UintVar(v *uint, name string, defaultValue uint, usage string) {
+	osParser.UintVar(v, name, defaultValue, usage)
 }
 
 func FloatVar(v *float64, name string, defaultValue float64, usage string) {
