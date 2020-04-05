@@ -30,6 +30,12 @@ var (
 		"love: %+v\n",
 		best, times, love)
 ```
+绑定函数的4个参数分别是：
+- 变量地址
+- flag名称
+- 默认值
+- flag使用方法提示
+
 上面的例子会输出
 ```yaml
 best: true
@@ -59,15 +65,9 @@ parser.StringVar(&stringVariable,"-string","empty","it's a string flag")
 
 为了方便，cyflag有一个"万能"绑定方法，你可以用它来绑定任意类型的变量（前提是cyflag支持），同时，它也是你绑定非默认类型的唯一方法（例如int64）：
 ```go
-parser.Bind(&variable,"-anytype","value with same type with variable","the usage")
+parser.Bind(&variable,"-anytype",defaultValue,"the usage")
 ```
 Bind()方法会在提供的变量类型与默认值类型无法转换时panic，注意，不需要类型完全相同，例如变量类型是int，而默认值类型是int64，这种情况下是可行的。但其中一个是有符号整数，而另一个是无符号整数是不可行的。
-
-绑定函数的4个参数分别是：
-- 变量地址
-- flag名称
-- 默认值
-- flag使用方法提示
 
 flag不一定要以字符'-'开头，这一点与Go标准库中的flag包不同，后者会自动的将字符'-'作为flag的前缀。
 
