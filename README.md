@@ -4,7 +4,7 @@
 - [English](README.md)
 - [中文](README.zh_CN.md)
 
-*cyflag* is a lib for parsing flags(CLI arguments), which being used frequently in CLI(Command-Line Interface). it's easier to use and has less limitation than the go standard lib *flag*.
+*cyflag* is a lib for parsing flags(CLI arguments, or other arguments represented by string), which being used frequently in CLI(Command-Line Interface). it's easier to use and has less limitation than the go standard lib *flag*.
 
 ## QuickStart
 ```go
@@ -85,7 +85,7 @@ If args == nil, the parser will try to parse parser.LeftArgs, so you can store a
 - *flagname*: only way to parse bool variable
 - *flagname value*: only way to parse non-bool variable
 
-**There are no limitation in the order of arguments and flags**, which is totally different with go standard lib *flag*, the latter parses until meet first non-flag arguments.
+**There is no restriction in the order of arguments and flags**, which is totally different with go standard lib *flag*, the latter parses until meet first non-flag arguments.
 
 For parsing `os.Args[1:]`, just call cyflag.BoolVar(...) (or any other binding function), and then call cyflag.Parse().
 

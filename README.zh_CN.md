@@ -4,49 +4,84 @@
 - [English](README.md)
 - [中文](README.zh_CN.md)
 
-*cyflag* 是一个用于parse命令行参数中flag的库，相比Go标准库中的flag，它更易于使用，并且限制更少。
+*cyflag* 是一个用于解析命令行参数（你也可以把它用于其他情况下的参数解析）的库，相比Go标准库中的flag，它更易于使用，并且限制更少。
 
-## 依赖
+## 快速上手
+```go
+var (
+		parser cyflag.Parser
+		args   = "i love cyflag -best -times 95"
 
-- [cyDS](https://github.com/yah01/cyDS-GO): 用Go实现的一些数据结构， *cyflag* 使用其中的trie来快速匹配flag。
+		best  bool
+		times int
+		love  string
+	)
+	parser.BoolVar(&best, "-best", false, "whether the best")
+	parser.IntVar(&times, "-times", 0, "-times [int]")
+	parser.StringVar(&love, "love", "something", "love [string]")
+
+	if err := parser.ParseString(args);err!=nil {
+		log.Println(err)
+	}
+
+
+	fmt.Printf("best: %+v\n"+
+		"times: %+v\n"+
+		"love: %+v\n",
+		best, times, love)
+```
+上面的例子会输出
+```yaml
+best: true
+times: 95
+love: cyflag
+```
 
 ## 用法
 
-*cyflag* 看上去很像Go标准库中的[flag](https://golang.org/pkg/flag/)，用法也相近。
+cyflag 看上去很像Go标准库中的flag包，实际上它们的用法也相似。
 
 ### 将变量与flag绑定
-*cyflag* 可以目前可以绑定三种类型的变量：
+cyflag 可以绑定5种类型的变量：
 - bool
-- int
+- int （也可绑定 int8，int16，……）
+- uint （也可绑定 uint8，uint16，……）
+- float64 （也可绑定 float32）
 - string
+他们的绑定方法几乎都一样，分别是：
+```go
+parser.BoolVar(&boolVariable,"-bool",false,"it's a bool flag")
+parser.IntVar(&intVariable,"-int",0,"it's a int flag")
+parser.UintVar(&uintVariable,"-uint",0,"it's a uint flag")
+parser.FloatVar(&float64Variable,"-float64",0.0,"it's a float64 flag")
+parser.StringVar(&stringVariable,"-string","empty","it's a string flag")
+```
 
-绑定的方法都差不多，例如对于布尔类型变量：
-> cyflag.BoolVar(&varible,"-boolflag",false,"it's a bool flag")
+为了方便，cyflag有一个"万能"绑定方法，你可以用它来绑定任意类型的变量（前提是cyflag支持），同时，它也是你绑定非默认类型的唯一方法（例如int64）：
+```go
+parser.Bind(&variable,"-anytype","value with same type with variable","the usage")
+```
+Bind()方法会在提供的变量类型与默认值类型无法转换时panic，注意，不需要类型完全相同，例如变量类型是int，而默认值类型是int64，这种情况下是可行的。但其中一个是有符号整数，而另一个是无符号整数是不可行的。
 
-函数的四个参数分别是：
-1. 变量地址
-2. flag名
-3. 默认值
-4. 用法提示
+绑定函数的4个参数分别是：
+- 变量地址
+- flag名称
+- 默认值
+- flag使用方法提示
 
-***flag* 名不必以字符'-'开头**, 这一点与标准库中的 *flag* 不同，后者会自动在flag前添加字符'-'。
+flag不一定要以字符'-'开头，这一点与Go标准库中的flag包不同，后者会自动的将字符'-'作为flag的前缀。
 
-### Parse
-**在所有绑定完成后**, 调用
-> cyflag.Parse()
+### 解析
+在所有的绑定都完成后，调用
+```go
+parser.Parse(args)
+```
+来解析参数。如果 args == nil ，那么parser会去解析parser.LeftArgs。在解析完成之后，无法解析的参数会存储在parser.LeftArgs中
 
-*cyflag* 将会parse命令行参数，并且把值存储到绑定的变量中。
+**注意**：参数格式的规则：
+- *flagname*：这是解析bool类型变量的唯一格式
+- *flagname value*：这是解析非bool类型变量的唯一格式
 
-**注意:** 参数格式的规则与标准库中 *flag* 有一些不同：
-- *flagname*: parse bool类型变量的唯一方法
-- *flagname value*: parse 非bool类型变量的唯一方法
+cyflag 对参数的顺序并没有限制，这一点也与Go标准库中的flag包不同，后者会在遇到第一个非flag参数时停止解析，而cyflag会解析所有可以解析的参数
 
-命令行参数中不属于flag及其值的参数，将会存储到 *cyflag.Args* 中。
-
-***cyflag* 对参数和flag的位置顺序没有要求**，这一点与标准库中 *flag*不同，后者要求所有flag及其值必须在non-flag参数之前。
-
-## 意外情况
-*cyflag.Parse()* 会返回一个error类型值，有两类情况：
-1. 没有错误，此时返回nil
-2. 对于int型flag，提供的值不能转换为int
-3. 对于非bool型flag，没有提供值
+如果是为了解析命令行参数（os.Args[1:]），可以不需要声明一个cyflag.Parser。直接使用cyflag.Bind(...)，cyflag.Parse()即可
