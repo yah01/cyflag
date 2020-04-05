@@ -88,3 +88,6 @@ If args == nil, the parser will try to parse parser.LeftArgs, so you can store a
 **There are no limitation in the order of arguments and flags**, which is totally different with go standard lib *flag*, the latter parses until meet first non-flag arguments.
 
 For parsing `os.Args[1:]`, just call cyflag.BoolVar(...) (or any other binding function), and then call cyflag.Parse().
+
+## TODO
+Now cyflag supports such many types for using reflect, reflect is slow, there may should be some fast binding and parsing methods that only use type assertion.
