@@ -77,7 +77,7 @@ The parameters of the methods above are:
 ```go
 parser.Parse(args)
 ```
-If args = nil, the parser will try to parse parser.LeftArgs, so you can store arguments into parser.LeftArgs and call Parse with a parameter nil.
+If args == nil, the parser will try to parse parser.LeftArgs, so you can store arguments into parser.LeftArgs and call Parse with a parameter nil.
 
 *cyflag* will parse the arguments and store the value into the binding variables, then store the arguments it can't parse into parser.LeftArgs.
 
