@@ -75,16 +75,19 @@ func (parser *Parser) Parse(args []string) error {
 	} else {
 		parser.LeftArgs = nil
 	}
-	for i, _ := range parser.flags {
-		flag := &parser.flags[i]
+	for _, flag := range parser.flags {
+		refVar := reflect.ValueOf(flag.variable).Elem()
+		defaultValue := reflect.ValueOf(flag.defaultValue)
 		switch flag.variable.(type) {
 		case *bool:
 			*(flag.variable.(*bool)) = flag.defaultValue.(bool)
-		case *int, *int32, *int64:
-			*(flag.variable.(*int)) = flag.defaultValue.(int)
+		case *int, *int8, *int16, *int32, *int64:
+			refVar.SetInt(defaultValue.Int())
+		case *uint, *uint8, *uint16, *uint32, *uint64:
+			refVar.SetUint(defaultValue.Uint())
 		case *float32, *float64:
-			*(flag.variable.(*float64)) = flag.defaultValue.(float64)
-		case *string, *[]byte:
+			refVar.SetFloat(defaultValue.Float())
+		case *string:
 			*(flag.variable.(*string)) = flag.defaultValue.(string)
 		}
 	}
@@ -94,31 +97,46 @@ func (parser *Parser) Parse(args []string) error {
 		if node, ok := parser.trie.Match(s); ok {
 			for j := 0; j < len(node.Values); j++ {
 				flag := node.Values[j].(*cyflag)
+				refVar := reflect.ValueOf(flag.variable).Elem()
 
 				switch flag.variable.(type) {
 				case *bool:
 					*(flag.variable.(*bool)) = true
 
-				case *int:
+				case *int, *int8, *int16, *int32, *int64:
 					if i+1 >= len(args) {
 						return fmt.Errorf("Miss interger, usage: %v", flag.Usage)
 					}
-					var err error
-					*(flag.variable.(*int)), err = strconv.Atoi(args[i+1])
+
+					value, err := strconv.ParseInt(args[i+1], 10, 64)
 					if err != nil {
 						return err
 					}
+					refVar.SetInt(value)
 					i++
 
-				case *float64:
+				case *uint, *uint8, *uint16, *uint32, *uint64:
+					if i+1 >= len(args) {
+						return fmt.Errorf("Miss interger, usage: %v", flag.Usage)
+					}
+
+					value, err := strconv.ParseUint(args[i+1], 10, 64)
+					if err != nil {
+						return err
+					}
+
+					refVar.SetUint(value)
+					i++
+
+				case *float32, *float64:
 					if i+1 >= len(args) {
 						return fmt.Errorf("Miss decimal, usage: %v", flag.Usage)
 					}
-					var err error
-					*(flag.variable.(*float64)), err = strconv.ParseFloat(args[i+1], 64)
+					value, err := strconv.ParseFloat(args[i+1], 64)
 					if err != nil {
 						return err
 					}
+					refVar.SetFloat(value)
 					i++
 
 				case *string:

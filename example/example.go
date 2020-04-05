@@ -15,14 +15,17 @@ func main() {
 		times int
 		love  string
 	)
-	parser.BoolVar(&best, "-best", false, "whether the best")
-	parser.IntVar(&times, "-times", 0, "-times [int]")
-	parser.StringVar(&love, "love", "something", "love [string]")
+	//parser.BoolVar(&best, "-best", false, "whether the best")
+	//parser.IntVar(&times, "-times", 0, "-times [int]")
+	//parser.StringVar(&love, "love", "something", "love [string]")
 
-	if err := parser.ParseString(args);err!=nil {
+	parser.Bind(&best, "-best", false, "whether the best")
+	parser.Bind(&times, "-times", 0, "-times [int]")
+	parser.Bind(&love, "love", "something", "love [string]")
+
+	if err := parser.ParseString(args); err != nil {
 		log.Println(err)
 	}
-
 
 	fmt.Printf("best: %+v\n"+
 		"times: %+v\n"+
