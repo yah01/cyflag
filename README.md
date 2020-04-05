@@ -58,10 +58,11 @@ parser.FloatVar(&float64Variable,"-float64",0.0,"it's a float64 flag")
 parser.StringVar(&stringVariable,"-string","empty","it's a string flag")
 ```
 
-For convenience, cyflag provides a method for binding variable of every type, and it's the only way to bind the variable of type which is not default type of cyflog(int32, int64, float32).
+For convenience, cyflag provides a method for binding variable of every type, and it's the only way to bind the variable of type which is not default type of cyflog(int32, int64, float32, ...).
 ```go
 parser.Bind(&variable,"-anytype","value with same type with variable","the usage")
 ```
+Bind() method would panic when the types of variable and default value don't match, they needn't be completely same, int and int64 is accepted, but signed type and unsigned type aren't accepted.
 
 The parameters of the methods above are:
 1. the address of the variable
