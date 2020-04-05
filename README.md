@@ -90,4 +90,5 @@ If args == nil, the parser will try to parse parser.LeftArgs, so you can store a
 For parsing `os.Args[1:]`, just call cyflag.BoolVar(...) (or any other binding function), and then call cyflag.Parse().
 
 ## TODO
-Now cyflag supports such many types for using reflect, reflect is slow, there may should be some fast binding and parsing methods that only use type assertion.
+- Now cyflag supports such many types for using reflect, reflect is slow, there may should be some fast binding and parsing methods that only use type assertion.
+- string parser should support string with space.
