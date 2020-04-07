@@ -18,7 +18,7 @@ var (
 )
 
 func init() {
-	copy(Args, os.Args)
+	copy(Args, os.Args[1:])
 }
 
 func BoolVar(v *bool, name string, defaultValue bool, usage string) {
