@@ -79,7 +79,7 @@ parser.Parse(args)
 ```
 If args == nil, the parser will try to parse parser.LeftArgs, so you can store arguments into parser.LeftArgs and call Parse with a parameter nil.
 
-*cyflag* will parse the arguments and store the value into the binding variables, then store the arguments it can't parse into parser.LeftArgs.
+*cyflag* will parse the arguments and store the value into the binding variables, then store the arguments it can't parse into parser.LeftArgs. For parsing CLI arguments, the arguments that can't be parsed would be stored into the cyflag.Args. At the beginning, cyflag.Args==os.Args[1:]
 
 **Notice:** The arguments format rule is a little different with go standard lib *flag*:
 - *flagname*: only way to parse bool variable

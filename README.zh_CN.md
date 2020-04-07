@@ -76,7 +76,7 @@ flag不一定要以字符'-'开头，这一点与Go标准库中的flag包不同�
 ```go
 parser.Parse(args)
 ```
-来解析参数。如果 args == nil ，那么parser会去解析parser.LeftArgs。在解析完成之后，无法解析的参数会存储在parser.LeftArgs中
+来解析参数。如果 args == nil ，那么parser会去解析parser.LeftArgs。在解析完成之后，无法解析的参数会存储在parser.LeftArgs中，对于调用cyflag.Parse()进行的解析，无法解析的参数会存储在cyflag.Args中。在一开始，cyflag.Args==os.Args[1:]
 
 **注意**：参数格式的规则：
 - *flagname*：这是解析bool类型变量的唯一格式
