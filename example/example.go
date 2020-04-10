@@ -9,7 +9,7 @@ import (
 func main() {
 	var (
 		parser cyflag.Parser
-		args   = "i love cyflag -best -times 95"
+		args   = `i love 'cyber flag' -best -times 95`
 
 		best  bool
 		times int

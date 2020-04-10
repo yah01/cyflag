@@ -143,8 +143,10 @@ func (parser *Parser) Parse(args []string) error {
 					if i+1 >= len(args) {
 						return fmt.Errorf("Miss string, usage: %v", flag.Usage)
 					}
-					*(flag.variable.(*string)) = args[i+1]
-					i++
+
+					var offset int
+					*(flag.variable.(*string)), offset = parseStringArgs(args[i+1:])
+					i += offset
 				}
 			}
 		} else {
@@ -167,4 +169,26 @@ func (parser *Parser) PrintUsage() {
 
 func (parser *Parser) Clear() {
 	*parser = Parser{}
+}
+
+func parseStringArgs(tailArgs []string) (str string, offset int) {
+	var (
+		quo = string(tailArgs[0][0])
+		arg string
+	)
+
+	if quo == `"` || quo == `'` {
+		for offset, arg = range tailArgs {
+			if strings.HasSuffix(arg, quo) {
+				str = strings.Join(tailArgs[0:offset+1], " ")
+				break
+			}
+		}
+
+		str = strings.Trim(str, quo)
+	} else {
+		str, offset = tailArgs[0], 1
+	}
+
+	return str, offset
 }

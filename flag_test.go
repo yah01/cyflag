@@ -7,7 +7,7 @@ import (
 func TestFlag(t *testing.T) {
 	var (
 		parser Parser
-		str    = "i love cyflag -best"
+		str    = `i love "cyber flag" -best`
 
 		best          bool
 		loveSomething string
