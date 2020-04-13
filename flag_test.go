@@ -12,6 +12,7 @@ func TestFlag(t *testing.T) {
 		best          bool
 		loveSomething string
 	)
+	t.Log(Args)
 	parser.BoolVar(&best, "-best", false, "-best")
 	parser.StringVar(&loveSomething, "love", "something", "love [string]")
 

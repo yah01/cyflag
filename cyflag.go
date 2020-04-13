@@ -18,6 +18,7 @@ var (
 )
 
 func init() {
+	Args = make([]string,len(os.Args)-1)
 	copy(Args, os.Args[1:])
 }
 

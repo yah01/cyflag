@@ -15,6 +15,8 @@ func main() {
 		times int
 		love  string
 	)
+
+	log.Println(cyflag.Args)
 	//parser.BoolVar(&best, "-best", false, "whether the best")
 	//parser.IntVar(&times, "-times", 0, "-times [int]")
 	//parser.StringVar(&love, "love", "something", "love [string]")
