@@ -10,20 +10,18 @@
 ```go
 var (
 		parser cyflag.Parser
-		args   = "i love cyflag -best -times 95"
+		args   = `i love "cyber flag" -best -times 95`
 
 		best  bool
 		times int
 		love  string
 	)
-	parser.BoolVar(&best, "-best", false, "whether the best")
-	parser.IntVar(&times, "-times", 0, "-times [int]")
-	parser.StringVar(&love, "love", "something", "love [string]")
 
-	if err := parser.ParseString(args);err!=nil {
-		log.Println(err)
-	}
+	parser.Bind(&best, "-best", false, "whether the best")
+	parser.Bind(&times, "-times", 0, "-times [int]")
+	parser.Bind(&love, "love", "something", "love [string]")
 
+	parser.ParseString(args)
 
 	fmt.Printf("best: %+v\n"+
 		"times: %+v\n"+
@@ -40,7 +38,7 @@ var (
 ```yaml
 best: true
 times: 95
-love: cyflag
+love: cyber flag
 ```
 
 ## 用法
