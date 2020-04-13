@@ -82,6 +82,7 @@ If args == nil, the parser will try to parse parser.LeftArgs, so you can store a
 **Notice:** The arguments format rule is a little different with go standard lib *flag*:
 - *flagname*: only way to parse bool variable
 - *flagname value*: only way to parse non-bool variable
+For string flag, quotes the argument which contains space with ' ' or " ". 
 
 **There is no restriction in the order of arguments and flags**, which is totally different with go standard lib *flag*, the latter parses until meet first non-flag arguments.
 
