@@ -171,6 +171,68 @@ func (parser *Parser) Clear() {
 	*parser = Parser{}
 }
 
+// Split arguments string into string slice.
+func splitArgsString(args string) []string {
+	args = strings.TrimSpace(args)
+	args += " "
+	var (
+		args_rune          = []rune(args)
+		leftQuote          rune
+		leftQuotePosition  int
+		hasLeftQuote       bool
+		left2RightQuoteMap = make(map[int]int)
+		argList            []string
+	)
+
+	// Find all quote pairs
+	for i := 0; i < len(args_rune); i++ {
+		c := args_rune[i]
+
+		// For string argument with space
+		if c == '\'' || c == '"' {
+			if hasLeftQuote && c == leftQuote {
+				left2RightQuoteMap[leftQuotePosition] = i
+				hasLeftQuote = false
+			} else if !hasLeftQuote {
+				leftQuote = c
+				hasLeftQuote = true
+				leftQuotePosition = i
+			}
+		}
+	}
+
+	var lastPosition int
+	for i := 0; i < len(args_rune); i++ {
+		c := args_rune[i]
+
+		var (
+			arg              string
+			allowEmptyString bool
+		)
+
+		switch c {
+		case '\'', '"':
+			if rightQuotePosition, ok := left2RightQuoteMap[i]; ok {
+				allowEmptyString = true
+				arg = strings.Trim(string(args_rune[i:rightQuotePosition]), string(c))
+				lastPosition = rightQuotePosition + 1
+				i = rightQuotePosition
+			}
+		case ' ':
+			arg = string(args_rune[lastPosition:i])
+			lastPosition = i + 1
+		default:
+			continue
+		}
+
+		if len(arg) > 0 || allowEmptyString {
+			argList = append(argList, arg)
+		}
+	}
+
+	return argList
+}
+
 func parseStringArgs(tailArgs []string) (str string, offset int) {
 	var (
 		quo = string(tailArgs[0][0])
