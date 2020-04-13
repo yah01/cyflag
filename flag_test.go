@@ -20,3 +20,12 @@ func TestFlag(t *testing.T) {
 
 	t.Log(best, loveSomething)
 }
+
+func TestSplitArgsString(t *testing.T) {
+	args := ` test split args = "hello world" args2  = ' "cyber" "flag" '`
+	argList := splitArgsString(args)
+
+	for i,arg := range argList {
+		t.Log(i,arg)
+	}
+}
