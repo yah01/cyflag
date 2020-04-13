@@ -18,7 +18,7 @@ func TestFlag(t *testing.T) {
 
 	parser.ParseString(str)
 
-	t.Log(best, loveSomething)
+	t.Log(best, "\n",loveSomething)
 }
 
 func TestSplitArgsString(t *testing.T) {

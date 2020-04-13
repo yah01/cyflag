@@ -145,7 +145,7 @@ func (parser *Parser) Parse(args []string) error {
 					}
 
 					var offset int
-					*(flag.variable.(*string)), offset = parseStringArgs(args[i+1:])
+					*(flag.variable.(*string)) = args[i+1]
 					i += offset
 				}
 			}
@@ -158,7 +158,7 @@ func (parser *Parser) Parse(args []string) error {
 }
 
 func (parser *Parser) ParseString(str string) error {
-	return parser.Parse(strings.Fields(str))
+	return parser.Parse(splitArgsString(str))
 }
 
 func (parser *Parser) PrintUsage() {
