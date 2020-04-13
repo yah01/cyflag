@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/yah01/cyflag"
 	"log"
+	"os"
+	"strings"
 )
 
 func main() {
@@ -16,7 +18,16 @@ func main() {
 		love  string
 	)
 
-	log.Println(cyflag.Args)
+	fields := strings.Fields(args)
+	for index,arg := range fields {
+		fmt.Println(index,arg)
+	}
+	for index,arg := range cyflag.Args {
+		fmt.Println(index,arg)
+	}
+	for index,arg := range os.Args {
+		fmt.Println(index,arg)
+	}
 	//parser.BoolVar(&best, "-best", false, "whether the best")
 	//parser.IntVar(&times, "-times", 0, "-times [int]")
 	//parser.StringVar(&love, "love", "something", "love [string]")
