@@ -232,25 +232,3 @@ func splitArgsString(args string) []string {
 
 	return argList
 }
-
-func parseStringArgs(tailArgs []string) (str string, offset int) {
-	var (
-		quo = string(tailArgs[0][0])
-		arg string
-	)
-
-	if quo == `"` || quo == `'` {
-		for offset, arg = range tailArgs {
-			if strings.HasSuffix(arg, quo) {
-				str = strings.Join(tailArgs[0:offset+1], " ")
-				break
-			}
-		}
-
-		str = strings.Trim(str, quo)
-	} else {
-		str, offset = tailArgs[0], 1
-	}
-
-	return str, offset
-}
